@@ -1,12 +1,9 @@
 {
-    "version": "1.0.1",
+   "version": "1.0.1",
     "changelog": "1. 修正自動更新功能\n2. 優化連線效率",
-    "url": "https://github.com/jung71219-sys/my-game/archive/refs/tags/v1.0.1.zip",
-    "equip_data": { ... },
-    "records": []
-}
+    "url": "https://github.com/jung71219-sys/my-game/releases/download/v1.0.1/game_logger.exe",
     "equip_data": {
-        "武器": [
+          "武器": [
             "紅星之劍  ",
             "無盡深淵弩砲",
             "堅定的信念弩砲",
