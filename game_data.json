@@ -1,7 +1,7 @@
 {
-    "version": "1.0.0",
-    "changelog": "初始版本\n- 練功紀錄管理\n- 數據分析\n- 裝備設定\n- 九頭龍傷害欄位\n- C跨一小時分數預計",
-    "url": "https://github.com/jung71219-sys/my-game/releases/download/v1.0.0/遊戲練功紀錄工具.exe",
+    "version": "1.0.1",
+    "changelog": "修正錯誤\n新增功能",
+    "url": "https://github.com/jung71219-sys/my-game/releases/download/v1.0.1/遊戲練功紀錄工具.exe",
     "equip_data": {
         "武器": [
             "傳說之劍",
