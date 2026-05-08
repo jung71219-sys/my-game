@@ -14,10 +14,11 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon, QColor
 
 
+
 # --- 版本資訊 ---
 CURRENT_VERSION = "1.0.0"
 # GitHub Raw JSON 網址
-UPDATE_URL = "https://raw.githubusercontent.com/jung71219-sys/game_logger/refs/heads/main/game_data.json"
+UPDATE_URL = "https://raw.githubusercontent.com/jung71219-sys/my-game/main/game_data.json"
 
 
 # --- 關鍵：處理打包後的檔案路徑 ---
@@ -26,6 +27,7 @@ def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
+
 
 
 class GameTracker(QMainWindow):
@@ -43,11 +45,13 @@ class GameTracker(QMainWindow):
         self.timer_display.timeout.connect(self.sync_realtime_updates)
 
 
+
         # 裝備資料存儲
         self.equip_data = {
             "武器": [], "項鍊": [], "卡片": [], 
             "坐騎": [], "鬥魂": [], "寵物": []
         }
+
 
 
         # 設定視窗圖示
@@ -56,9 +60,11 @@ class GameTracker(QMainWindow):
             self.setWindowIcon(QIcon(icon_file))
 
 
+
         # 主分頁系統
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
+
 
 
         self.record_tab = QWidget()
@@ -66,9 +72,11 @@ class GameTracker(QMainWindow):
         self.config_tab = QWidget()
 
 
+
         self.tabs.addTab(self.record_tab, "練功紀錄")
         self.tabs.addTab(self.analysis_tab, "數據分析")
         self.tabs.addTab(self.config_tab, "裝備設定")
+
 
 
         self.setup_record_tab()
@@ -86,16 +94,20 @@ class GameTracker(QMainWindow):
         QTimer.singleShot(3000, self.auto_check_update)
 
 
+
     def setup_record_tab(self):
         layout = QVBoxLayout(self.record_tab)
         layout.setSpacing(10)
 
 
+
         plus_levels = [f"+{i}" for i in range(13)]
+
 
 
         def set_resizable(widget):
             widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
 
 
         # --- 搜尋與工具排 ---
@@ -120,6 +132,7 @@ class GameTracker(QMainWindow):
         tool_layout.addWidget(self.export_csv_btn)
 
 
+
         # --- 第一排 ---
         input_layout1 = QHBoxLayout()
         input_layout1.setSpacing(15)
@@ -137,6 +150,7 @@ class GameTracker(QMainWindow):
         self.soul_input = QComboBox(); set_resizable(self.soul_input)
 
 
+
         input_layout1.addWidget(QLabel("武器:"))
         input_layout1.addWidget(self.weapon_plus); input_layout1.addWidget(self.weapon_input)
         input_layout1.addWidget(QLabel("項鍊:"))
@@ -145,6 +159,7 @@ class GameTracker(QMainWindow):
         input_layout1.addWidget(self.mount_plus); input_layout1.addWidget(self.mount_input)
         input_layout1.addWidget(QLabel("鬥魂:"))
         input_layout1.addWidget(self.soul_plus); input_layout1.addWidget(self.soul_input)
+
 
 
         # --- 第二排 (卡片/寵物) ---
@@ -160,6 +175,7 @@ class GameTracker(QMainWindow):
         self.pet_input = QComboBox(); set_resizable(self.pet_input)
 
 
+
         combos = [self.weapon_input, self.neck_input, self.card_input1, self.card_input2,
                   self.card_input3, self.card_input4, self.mount_input, self.soul_input, self.pet_input]
         for combo in combos:
@@ -167,11 +183,13 @@ class GameTracker(QMainWindow):
             combo.setMinimumWidth(0)
 
 
+
         input_layout_cards.addWidget(QLabel("卡1:")); input_layout_cards.addWidget(self.card_plus1); input_layout_cards.addWidget(self.card_input1)
         input_layout_cards.addWidget(QLabel("卡2:")); input_layout_cards.addWidget(self.card_plus2); input_layout_cards.addWidget(self.card_input2)
         input_layout_cards.addWidget(QLabel("卡3:")); input_layout_cards.addWidget(self.card_plus3); input_layout_cards.addWidget(self.card_input3)
         input_layout_cards.addWidget(QLabel("卡4:")); input_layout_cards.addWidget(self.card_plus4); input_layout_cards.addWidget(self.card_input4)
         input_layout_cards.addWidget(QLabel("寵物:")); input_layout_cards.addWidget(self.pet_input)
+
 
 
         # --- 第三排 (數值/計時) ---
@@ -183,14 +201,17 @@ class GameTracker(QMainWindow):
         self.time_input.setRange(0.00, 999999); self.time_input.setSuffix(" 分鐘")
 
 
+
         self.exp_start_input = QDoubleSpinBox(); set_resizable(self.exp_start_input)
         self.exp_start_input.setRange(0, 100.00000); self.exp_start_input.setDecimals(5); self.exp_start_input.setSuffix(" % (起始)")
+
 
 
         self.exp_end_input = QDoubleSpinBox(); set_resizable(self.exp_end_input)
         self.exp_end_input.setRange(0, 100.00000); self.exp_end_input.setDecimals(5); self.exp_end_input.setSuffix(" % (結束)")
         
         self.note_input = QLineEdit(); set_resizable(self.note_input); self.note_input.setPlaceholderText("備註事項")
+
 
 
         input_layout2.addWidget(QLabel("爆傷:")); input_layout2.addWidget(self.crit_input)
@@ -201,6 +222,7 @@ class GameTracker(QMainWindow):
         input_layout2.addWidget(QLabel("備註:")); input_layout2.addWidget(self.note_input)
 
 
+
         # --- 第四排 (按鈕工具排) ---
         btn_layout = QHBoxLayout()
         self.timer_btn = QPushButton("開始計時")
@@ -208,12 +230,15 @@ class GameTracker(QMainWindow):
         self.timer_btn.clicked.connect(self.toggle_timer)
 
 
+
         self.copy_btn = QPushButton("複製前一筆")
         self.copy_btn.clicked.connect(self.copy_last_record)
 
 
+
         self.clear_btn = QPushButton("一鍵清空")
         self.clear_btn.clicked.connect(self.clear_inputs)
+
 
 
         add_btn = QPushButton("新增紀錄")
@@ -221,14 +246,17 @@ class GameTracker(QMainWindow):
         add_btn.clicked.connect(self.add_record)
 
 
+
         edit_btn = QPushButton("修改選中列")
         edit_btn.setStyleSheet("background-color: #2196F3; color: white; font-weight: bold; height: 35px;")
         edit_btn.clicked.connect(self.edit_record)
 
 
+
         del_btn = QPushButton("刪除選中紀錄")
         del_btn.setStyleSheet("background-color: #f44336; color: white; font-weight: bold; height: 35px;")
         del_btn.clicked.connect(self.delete_record)
+
 
 
         btn_layout.addWidget(self.timer_btn)
@@ -237,6 +265,7 @@ class GameTracker(QMainWindow):
         btn_layout.addWidget(add_btn)
         btn_layout.addWidget(edit_btn)
         btn_layout.addWidget(del_btn)
+
 
 
         # --- 表格 ---
@@ -250,12 +279,14 @@ class GameTracker(QMainWindow):
         self.table.itemDoubleClicked.connect(self.load_to_inputs)
 
 
+
         layout.addLayout(tool_layout)
         layout.addLayout(input_layout1)
         layout.addLayout(input_layout_cards)
         layout.addLayout(input_layout2)
         layout.addLayout(btn_layout)
         layout.addWidget(self.table)
+
 
 
     def setup_analysis_tab(self):
@@ -278,10 +309,12 @@ class GameTracker(QMainWindow):
         main_layout.addLayout(countdown_group)
 
 
+
         # 中間：排行榜
         info_label = QLabel("### 效率排行榜 (依據時薪 %/hr 排序)")
         info_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(info_label)
+
 
 
         self.rank_table = QTableWidget()
@@ -291,10 +324,12 @@ class GameTracker(QMainWindow):
         main_layout.addWidget(self.rank_table)
 
 
+
         refresh_rank_btn = QPushButton("刷新分析數據")
         refresh_rank_btn.setFixedHeight(40)
         refresh_rank_btn.clicked.connect(self.update_analysis)
         main_layout.addWidget(refresh_rank_btn)
+
 
 
     def setup_config_tab(self):
@@ -326,6 +361,7 @@ class GameTracker(QMainWindow):
         config_input_layout.addWidget(add_item_btn)
 
 
+
         self.config_table = QTableWidget()
         self.config_table.setColumnCount(2)
         self.config_table.setHorizontalHeaderLabels(["類別", "名稱"])
@@ -333,14 +369,17 @@ class GameTracker(QMainWindow):
         self.config_table.itemChanged.connect(self.on_config_item_changed)
 
 
+
         del_item_btn = QPushButton("刪除裝備項目")
         del_item_btn.clicked.connect(self.delete_config_item)
+
 
 
         layout.addLayout(config_search_layout)
         layout.addLayout(config_input_layout)
         layout.addWidget(self.config_table)
         layout.addWidget(del_item_btn)
+
 
 
     # --- 更新與資料同步邏輯 ---
@@ -365,10 +404,12 @@ class GameTracker(QMainWindow):
                     self.save_data()
 
 
+
                 # --- 檢查版本更新 ---
                 remote_version = data.get("version", CURRENT_VERSION)
                 remote_v_list = [int(x) for x in remote_version.split(".")]
                 current_v_list = [int(x) for x in CURRENT_VERSION.split(".")]
+
 
 
                 if remote_v_list > current_v_list:
@@ -384,6 +425,7 @@ class GameTracker(QMainWindow):
             print(f"檢查更新失敗: {e}")
 
 
+
     def execute_auto_update(self, download_url):
         """ 下載檔案並透過批次檔進行自我替換 """
         if not download_url:
@@ -391,9 +433,11 @@ class GameTracker(QMainWindow):
             return
 
 
+
         try:
             current_exe = os.path.abspath(sys.executable)
             new_exe = current_exe + ".new"
+
 
 
             response = requests.get(download_url, stream=True)
@@ -404,6 +448,7 @@ class GameTracker(QMainWindow):
                             f.write(chunk)
             else:
                 raise Exception("下載失敗，伺服器回應錯誤")
+
 
 
             bat_path = os.path.join(os.path.dirname(current_exe), "update_helper.bat")
@@ -421,13 +466,16 @@ del "%~f0"
 """)
 
 
+
             subprocess.Popen([bat_path], shell=True, creationflags=subprocess.CREATE_NO_WINDOW)
             QApplication.quit()
             sys.exit()
 
 
+
         except Exception as e:
             QMessageBox.critical(self, "更新錯誤", f"更新過程中發生錯誤：\n{str(e)}")
+
 
 
     # --- 功能邏輯 ---
@@ -436,6 +484,7 @@ del "%~f0"
             elapsed_mins = (time.time() - self.start_time) / 60
             self.timer_btn.setText(f"結束計時 ({elapsed_mins:.2f}m)")
             self.calculate_countdown()
+
 
 
     def toggle_timer(self):
@@ -454,11 +503,13 @@ del "%~f0"
             self.calculate_countdown()
 
 
+
     def calculate_countdown(self):
         diff_exp = self.next_lvl_exp.value()
         if diff_exp <= 0:
             self.countdown_label.setText("預計升級所需時間: --小時 --分")
             return
+
 
 
         exps = []
@@ -478,6 +529,7 @@ del "%~f0"
                 avg_hr = (avg_hr + current_hr) / 2 if avg_hr > 0 else current_hr
 
 
+
         if avg_hr <= 0:
             self.countdown_label.setText("預計升級所需時間: 尚未有數據")
             return
@@ -492,11 +544,13 @@ del "%~f0"
             self.countdown_label.setText(f"預計升級所需時間: {hrs}小時 {mins}分")
 
 
+
     def clear_inputs(self):
         self.time_input.setValue(0)
         self.exp_start_input.setValue(0)
         self.exp_end_input.setValue(0)
         self.note_input.clear()
+
 
 
     def copy_last_record(self):
@@ -507,6 +561,7 @@ del "%~f0"
                 prev_end = float(self.table.item(last_row, 13).text())
                 self.exp_start_input.setValue(prev_end)
             except: pass
+
 
 
     def add_record(self):
@@ -521,6 +576,7 @@ del "%~f0"
             QMessageBox.critical(self, "錯誤", str(e))
 
 
+
     def edit_record(self):
         row = self.table.currentRow()
         if row >= 0:
@@ -530,6 +586,7 @@ del "%~f0"
             self.update_analysis()
         else:
             QMessageBox.warning(self, "提示", "請先點選要修改的資料列")
+
 
 
     def update_row_from_inputs(self, row):
@@ -548,7 +605,7 @@ del "%~f0"
             f"({self.soul_plus.currentText()}){self.soul_input.currentText()}",
             self.pet_input.currentText(),
             self.crit_input.text(), self.atk_boost_input.text(),
-            f"{minutes:.2f}", f"{self.exp_start_input.value():.5f}",
+            f"{minutes:.2f}", f"{self.exp_start_input.value():.5f}", 
             f"{self.exp_end_input.value():.5f}", f"{diff:.5f}", f"{hourly_exp:.5f}",
             self.note_input.text()
         ]
@@ -556,8 +613,10 @@ del "%~f0"
             self.table.setItem(row, col, QTableWidgetItem(str(val)))
 
 
+
     def load_to_inputs(self, item):
         self.load_to_inputs_by_row(item.row())
+
 
 
     def load_to_inputs_by_row(self, row):
@@ -566,6 +625,7 @@ del "%~f0"
                 idx = text.find(")")
                 return text[1:idx], text[idx+1:]
             return "+0", text
+
 
 
         w_p, w_v = split_plus(self.table.item(row, 0).text())
@@ -586,6 +646,7 @@ del "%~f0"
         self.soul_plus.setCurrentText(s_p); self.soul_input.setCurrentText(s_v)
 
 
+
         self.pet_input.setCurrentText(self.table.item(row, 8).text())
         self.crit_input.setText(self.table.item(row, 9).text())
         self.atk_boost_input.setText(self.table.item(row, 10).text())
@@ -595,6 +656,7 @@ del "%~f0"
         self.note_input.setText(self.table.item(row, 16).text())
 
 
+
     def delete_record(self):
         row = self.table.currentRow()
         if row >= 0:
@@ -602,6 +664,7 @@ del "%~f0"
                 self.table.removeRow(row)
                 self.save_data()
                 self.update_analysis()
+
 
 
     def add_config_item(self):
@@ -614,6 +677,7 @@ del "%~f0"
                 self.refresh_all_combos()
                 self.item_name_input.clear()
                 self.save_data()
+
 
 
     def on_config_item_changed(self, item):
@@ -632,6 +696,7 @@ del "%~f0"
                 self.save_data()
 
 
+
     def delete_config_item(self):
         row = self.config_table.currentRow()
         if row >= 0:
@@ -645,6 +710,7 @@ del "%~f0"
                     self.equip_data[cate].remove(name)
                 self.refresh_all_combos()
                 self.save_data()
+
 
 
     def update_config_table_from_data(self):
@@ -662,6 +728,7 @@ del "%~f0"
         self.filter_config_table()
 
 
+
     def filter_config_table(self):
         selected_cate = self.cate_combo.currentText()
         search_text = self.config_search_input.text().lower().strip()
@@ -672,6 +739,7 @@ del "%~f0"
                 match_cate = (cate_item.text() == selected_cate)
                 match_search = (search_text in name_item.text().lower())
                 self.config_table.setRowHidden(r, not (match_cate and match_search))
+
 
 
     def filter_table(self):
@@ -686,6 +754,7 @@ del "%~f0"
             self.table.setRowHidden(r, not match)
 
 
+
     def refresh_all_combos(self):
         self.update_combo_items(self.weapon_input, "武器")
         self.update_combo_items(self.neck_input, "項鍊")
@@ -696,6 +765,7 @@ del "%~f0"
             self.update_combo_items(cb, "卡片")
 
 
+
     def update_combo_items(self, combo, key):
         current = combo.currentText()
         combo.blockSignals(True)
@@ -703,6 +773,7 @@ del "%~f0"
         combo.addItems(self.equip_data[key])
         combo.setCurrentText(current)
         combo.blockSignals(False)
+
 
 
     def apply_conditional_formatting(self):
@@ -732,6 +803,7 @@ del "%~f0"
             except: pass
 
 
+
     def toggle_dark_mode(self):
         self.is_dark_mode = not self.is_dark_mode
         if self.is_dark_mode:
@@ -750,6 +822,7 @@ del "%~f0"
         self.apply_conditional_formatting()
 
 
+
     def export_to_csv(self):
         path, _ = QFileDialog.getSaveFileName(self, "匯出 CSV", "", "CSV Files (*.csv)")
         if path:
@@ -761,6 +834,7 @@ del "%~f0"
                     row = [self.table.item(r, c).text() for c in range(self.table.columnCount())]
                     writer.writerow(row)
             QMessageBox.information(self, "成功", "資料已匯出")
+
 
 
     def import_from_csv(self):
@@ -782,71 +856,77 @@ del "%~f0"
                 QMessageBox.critical(self, "錯誤", f"匯入失敗: {e}")
 
 
+
     def update_analysis(self):
-        stats = {}
+        self.rank_table.setRowCount(0)
+        combos = {}
         for r in range(self.table.rowCount()):
             try:
-                w = self.table.item(r, 0).text()
-                n = self.table.item(r, 1).text()
-                crit = float(self.table.item(r, 9).text().replace('%',''))
-                hr_exp = float(self.table.item(r, 15).text())
-                key = f"{w} / {n}"
-                if key not in stats: stats[key] = {"hr": [], "crit": []}
-                stats[key]["hr"].append(hr_exp)
-                stats[key]["crit"].append(crit)
+                if self.table.isRowHidden(r): continue
+                # 組合鍵：武器+項鍊+卡片組合
+                combo_key = f"{self.table.item(r, 0).text()} | {self.table.item(r, 1).text()}"
+                hourly = float(self.table.item(r, 15).text())
+                crit = float(self.table.item(r, 9).text().replace('%','')) if self.table.item(r, 9).text() else 0
+                if combo_key not in combos:
+                    combos[combo_key] = {"max_hr": 0, "crits": [], "count": 0}
+                combos[combo_key]["max_hr"] = max(combos[combo_key]["max_hr"], hourly)
+                combos[combo_key]["crits"].append(crit)
+                combos[combo_key]["count"] += 1
             except: pass
-
-
-        sorted_stats = sorted(stats.items(), key=lambda x: max(x[1]["hr"]), reverse=True)
-        self.rank_table.setRowCount(0)
-        for i, (combo, data) in enumerate(sorted_stats):
+        
+        sorted_keys = sorted(combos.keys(), key=lambda k: combos[k]["max_hr"], reverse=True)
+        for i, key in enumerate(sorted_keys):
             row = self.rank_table.rowCount()
             self.rank_table.insertRow(row)
-            avg_crit = sum(data["crit"]) / len(data["crit"])
+            avg_crit = sum(combos[key]["crits"]) / len(combos[key]["crits"])
             self.rank_table.setItem(row, 0, QTableWidgetItem(str(i+1)))
-            self.rank_table.setItem(row, 1, QTableWidgetItem(combo))
+            self.rank_table.setItem(row, 1, QTableWidgetItem(key))
             self.rank_table.setItem(row, 2, QTableWidgetItem(f"{avg_crit:.1f}%"))
-            self.rank_table.setItem(row, 3, QTableWidgetItem(f"{max(data['hr']):.5f}"))
-            self.rank_table.setItem(row, 4, QTableWidgetItem(f"{len(data['hr'])} 次"))
+            self.rank_table.setItem(row, 3, QTableWidgetItem(f"{combos[key]['max_hr']:.5f}"))
+            self.rank_table.setItem(row, 4, QTableWidgetItem(str(combos[key]["count"])))
         self.calculate_countdown()
 
 
+
     def save_data(self):
-        all_data = {
-            "records": [],
-            "equip_data": self.equip_data,
-            "next_lvl_exp": self.next_lvl_exp.value()
-        }
+        records = []
         for r in range(self.table.rowCount()):
             row_data = [self.table.item(r, c).text() for c in range(self.table.columnCount())]
-            all_data["records"].append(row_data)
+            records.append(row_data)
         
+        data = {
+            "version": CURRENT_VERSION,
+            "next_lvl_exp": self.next_lvl_exp.value(),
+            "equip_data": self.equip_data,
+            "records": records
+        }
         with open(self.data_file, "w", encoding="utf-8") as f:
-            json.dump(all_data, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
 
 
     def load_data(self):
-        if os.path.exists(self.data_file):
-            try:
-                with open(self.data_file, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    self.equip_data.update(data.get("equip_data", {}))
-                    self.next_lvl_exp.setValue(data.get("next_lvl_exp", 0))
-                    
-                    self.refresh_all_combos()
-                    self.update_config_table_from_data()
-                    
-                    records = data.get("records", [])
-                    self.table.setRowCount(0)
-                    for row_data in records:
-                        row = self.table.rowCount()
-                        self.table.insertRow(row)
-                        for c, val in enumerate(row_data):
-                            self.table.setItem(row, c, QTableWidgetItem(val))
-                self.apply_conditional_formatting()
-                self.update_analysis()
-            except Exception as e:
-                print(f"載入失敗: {e}")
+        if not os.path.exists(self.data_file): return
+        try:
+            with open(self.data_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                self.next_lvl_exp.setValue(data.get("next_lvl_exp", 0))
+                self.equip_data.update(data.get("equip_data", {}))
+                self.refresh_all_combos()
+                self.update_config_table_from_data()
+                
+                records = data.get("records", [])
+                self.table.setRowCount(0)
+                for row_data in records:
+                    row = self.table.rowCount()
+                    self.table.insertRow(row)
+                    for c, val in enumerate(row_data):
+                        self.table.setItem(row, c, QTableWidgetItem(str(val)))
+            self.apply_conditional_formatting()
+            self.update_analysis()
+        except Exception as e:
+            print(f"載入失敗: {e}")
+
 
 
 if __name__ == "__main__":
