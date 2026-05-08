@@ -171,6 +171,18 @@ class GameTracker(QMainWindow):
         input_layout2.addWidget(QLabel("結束:")); input_layout2.addWidget(self.exp_end_input)
         input_layout2.addWidget(QLabel("備註:")); input_layout2.addWidget(self.note_input)
         
+        input_layout3 = QHBoxLayout()
+        self.dragon_time_combo = QComboBox(); self.dragon_time_combo.addItems(["早", "晚"]); self.dragon_time_combo.setFixedWidth(60)
+        self.dragon_dmg_input = QLineEdit(); set_resizable(self.dragon_dmg_input); self.dragon_dmg_input.setPlaceholderText("九頭龍傷害")
+        self.c_cross_score_input = QDoubleSpinBox(); set_resizable(self.c_cross_score_input)
+        self.c_cross_score_input.setRange(0.00, 999999.99); self.c_cross_score_input.setDecimals(2); self.c_cross_score_input.setSuffix(" 分")
+        
+        input_layout3.addWidget(QLabel("九頭龍:"))
+        input_layout3.addWidget(self.dragon_time_combo)
+        input_layout3.addWidget(self.dragon_dmg_input)
+        input_layout3.addWidget(QLabel("C跨一小時分數預計:"))
+        input_layout3.addWidget(self.c_cross_score_input)
+        
         btn_layout = QHBoxLayout()
         self.timer_btn = QPushButton("開始計時")
         self.timer_btn.setStyleSheet("background-color: #673AB7; color: white; font-weight: bold; height: 35px;")
@@ -202,10 +214,10 @@ class GameTracker(QMainWindow):
         btn_layout.addWidget(del_btn)
         
         self.table = QTableWidget()
-        self.table.setColumnCount(17)
+        self.table.setColumnCount(19)
         self.table.setHorizontalHeaderLabels([
             "武器", "項鍊", "卡片1", "卡片2", "卡片3", "卡片4", "坐騎", "鬥魂", "寵物", 
-            "爆傷", "攻增", "時間", "前經驗(%)", "後經驗(%)", "獲得(%)", "時薪(%/hr)", "備註"
+            "爆傷", "攻增", "時間", "前經驗(%)", "後經驗(%)", "獲得(%)", "時薪(%/hr)", "九頭龍", "C跨分數", "備註"
         ])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.itemDoubleClicked.connect(self.load_to_inputs)
@@ -214,6 +226,7 @@ class GameTracker(QMainWindow):
         layout.addLayout(input_layout1)
         layout.addLayout(input_layout_cards)
         layout.addLayout(input_layout2)
+        layout.addLayout(input_layout3)
         layout.addLayout(btn_layout)
         layout.addWidget(self.table)
     
@@ -513,6 +526,8 @@ del "%~f0"
         self.exp_start_input.setValue(0)
         self.exp_end_input.setValue(0)
         self.note_input.clear()
+        self.dragon_dmg_input.clear()
+        self.c_cross_score_input.setValue(0)
     
     def copy_last_record(self):
         if self.table.rowCount() > 0:
@@ -550,6 +565,8 @@ del "%~f0"
         minutes = self.time_input.value()
         hourly_exp = (diff / minutes * 60) if minutes > 0 else 0
         
+        dragon_info = f"({self.dragon_time_combo.currentText()}){self.dragon_dmg_input.text()}"
+        
         data = [
             f"({self.weapon_plus.currentText()}){self.weapon_input.currentText()}",
             f"({self.neck_plus.currentText()}){self.neck_input.currentText()}",
@@ -563,6 +580,7 @@ del "%~f0"
             self.crit_input.text(), self.atk_boost_input.text(),
             f"{minutes:.2f}", f"{self.exp_start_input.value():.5f}", 
             f"{self.exp_end_input.value():.5f}", f"{diff:.5f}", f"{hourly_exp:.5f}",
+            dragon_info, f"{self.c_cross_score_input.value():.2f}",
             self.note_input.text()
         ]
         for col, val in enumerate(data):
@@ -601,7 +619,21 @@ del "%~f0"
         self.time_input.setValue(float(self.table.item(row, 11).text()))
         self.exp_start_input.setValue(float(self.table.item(row, 12).text()))
         self.exp_end_input.setValue(float(self.table.item(row, 13).text()))
-        self.note_input.setText(self.table.item(row, 16).text())
+        
+        dragon_text = self.table.item(row, 16).text()
+        if dragon_text.startswith("(") and ")" in dragon_text:
+            idx = dragon_text.find(")")
+            dragon_time = dragon_text[1:idx]
+            dragon_dmg = dragon_text[idx+1:]
+            self.dragon_time_combo.setCurrentText(dragon_time)
+            self.dragon_dmg_input.setText(dragon_dmg)
+        
+        try:
+            self.c_cross_score_input.setValue(float(self.table.item(row, 17).text()))
+        except:
+            self.c_cross_score_input.setValue(0)
+        
+        self.note_input.setText(self.table.item(row, 18).text())
     
     def delete_record(self):
         row = self.table.currentRow()
