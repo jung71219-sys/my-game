@@ -1,8 +1,4 @@
-# 忽略所有檔案
-*
-# 但不要忽略資料夾
-!*/
-# 排除在外：允許所有 .py 檔案
-!*.py
-# 允許 .gitignore 自己也上傳（建議保留）
-!.gitignore
+__pycache__/
+build/
+dist/
+*.spec
