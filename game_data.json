@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "next_lvl_exp": 0.0,
     "equip_data": {
         "武器": [
@@ -325,5 +325,7 @@
             "0.00",
             ""
         ]
-    ]
+    ],
+    "changelog": "??? v1.0.1??? Enter ?????????????????????????",
+    "url": "https://github.com/jung71219-sys/my-game/releases/download/v1.0.1/GameLogger.exe"
 }
